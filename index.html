@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoCare - Neonatal Consultations</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #f5f5f5;
+        }
+
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .doctor-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .doctor-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.2);
+        }
+
+        .doctor-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .doctor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            margin: 0 auto 16px;
+        }
+
+        .doctor-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .doctor-specialty {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .doctor-info {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 12px;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .price-tag {
+            background: #4caf50;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .payment-summary {
+            background: #f5f5f5;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 24px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 600;
+            color: #667eea;
+            padding-top: 12px;
+            border-top: 2px solid #ddd;
+            margin-top: 12px;
+        }
+
+        .stripe-form {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .card-element {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            margin-bottom: 16px;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-placeholder {
+            color: white;
+            text-align: center;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .control-btn.end-call {
+            background: #f44336;
+            border-color: #f44336;
+        }
+
+        .control-btn.end-call:hover {
+            background: #d32f2f;
+        }
+
+        .chat-panel {
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 20px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+
+        .message {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .message.doctor {
+            background: #e3f2fd;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #4caf50;
+            color: white;
+            margin-left: 12px;
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .toggle-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .toggle-link {
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .toggle-link:hover {
+            text-decoration: underline;
+        }
+
+        .processing {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingDot {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Mock doctors data
+        const mockDoctors = [
+            {
+                id: 1,
+                name: "Dr. Sarah Johnson",
+                specialty: "Neonatal Intensive Care",
+                experience: "12 years",
+                rating: "4.9",
+                price: 75,
+                avatar: "👩‍⚕️"
+            },
+            {
+                id: 2,
+                name: "Dr. Michael Chen",
+                specialty: "Pediatric Neonatology",
+                experience: "15 years",
+                rating: "4.8",
+                price: 85,
+                avatar: "👨‍⚕️"
+            },
+            {
+                id: 3,
+                name: "Dr. Emily Rodriguez",
+                specialty: "Newborn Care Specialist",
+                experience: "8 years",
+                rating: "4.9",
+                price: 70,
+                avatar: "👩‍⚕️"
+            },
+            {
+                id: 4,
+                name: "Dr. James Wilson",
+                specialty: "Neonatal Cardiology",
+                experience: "20 years",
+                rating: "5.0",
+                price: 95,
+                avatar: "👨‍⚕️"
+            }
+        ];
+
+        function App() {
+            const [currentView, setCurrentView] = useState('login');
+            const [user, setUser] = useState(null);
+            const [selectedDoctor, setSelectedDoctor] = useState(null);
+            const [isProcessing, setIsProcessing] = useState(false);
+            const [freeConsultations, setFreeConsultations] = useState(1);
+            const [hasUsedFirstConsultation, setHasUsedFirstConsultation] = useState(false);
+            const [hasSeenFirstPaywall, setHasSeenFirstPaywall] = useState(false);
+            const [selectedPlan, setSelectedPlan] = useState(null);
+
+            const handleDoctorSelect = (doc) => {
+                setSelectedDoctor(doc);
+                // If user has free consultations, go directly to consultation
+                if (freeConsultations > 0) {
+                    setCurrentView('consultation');
+                } else {
+                    // On second attempt and onwards, show offers page first
+                    setCurrentView('offers');
+                }
+            };
+
+            const handleEndConsultation = () => {
+                // If this was a free consultation and user hasn't seen paywall yet
+                if (freeConsultations > 0 && !hasUsedFirstConsultation) {
+                    setFreeConsultations(0);
+                    setHasUsedFirstConsultation(true);
+                    setCurrentView('paywall');
+                } else {
+                    setCurrentView('doctors');
+                }
+                setSelectedDoctor(null);
+            };
+
+            const handlePaywallDismiss = () => {
+                setHasSeenFirstPaywall(true);
+                setCurrentView('doctors');
+            };
+
+            const handlePlanSelect = (plan) => {
+                setSelectedPlan(plan);
+                setCurrentView('payment');
+            };
+
+            const views = {
+                login: <LoginView onLogin={setUser} />,
+                doctors: <DoctorsView 
+                    user={user} 
+                    freeConsultations={freeConsultations}
+                    onSelectDoctor={handleDoctorSelect} 
+                    onLogout={() => { 
+                        setUser(null); 
+                        setCurrentView('login'); 
+                        setFreeConsultations(1); 
+                        setHasUsedFirstConsultation(false); 
+                        setHasSeenFirstPaywall(false);
+                    }} 
+                />,
+                paywall: <PaywallView 
+                    onDismiss={handlePaywallDismiss}
+                    isFirstView={!hasSeenFirstPaywall}
+                />,
+                offers: <OffersView
+                    doctor={selectedDoctor}
+                    onSelectPlan={handlePlanSelect}
+                    onBack={() => setCurrentView('doctors')}
+                />,
+                payment: <PaymentView 
+                    doctor={selectedDoctor}
+                    plan={selectedPlan}
+                    user={user} 
+                    onBack={() => setCurrentView('offers')} 
+                    onPaymentComplete={() => { 
+                        setIsProcessing(true); 
+                        setTimeout(() => { 
+                            setIsProcessing(false); 
+                            setCurrentView('consultation'); 
+                        }, 2000); 
+                    }} 
+                />,
+                consultation: <ConsultationView 
+                    doctor={selectedDoctor} 
+                    user={user} 
+                    onEndCall={handleEndConsultation} 
+                />
+            };
+
+            useEffect(() => {
+                if (user && currentView === 'login') {
+                    setCurrentView('doctors');
+                }
+            }, [user]);
+
+            return (
+                <div className="app-container">
+                    {isProcessing ? (
+                        <div className="card">
+                            <div className="processing">
+                                <div className="spinner"></div>
+                                <h2>Processing Payment...</h2>
+                                <p>Please wait while we confirm your booking</p>
+                            </div>
+                        </div>
+                    ) : views[currentView]}
+                </div>
+            );
+        }
+
+        function LoginView({ onLogin }) {
+            const [isSignup, setIsSignup] = useState(false);
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [name, setName] = useState('');
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const userData = {
+                    email,
+                    name: isSignup ? name : email.split('@')[0],
+                    id: Date.now()
+                };
+                onLogin(userData);
+            };
+
+            return (
+                <div className="card" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                    <div className="logo">
+                        <h1>👶 NeoCare</h1>
+                        <p>Expert Neonatal Care, Anytime</p>
+                    </div>
+                    <h2 style={{ marginBottom: '24px', textAlign: 'center' }}>
+                        {isSignup ? 'Create Account' : 'Welcome Back'}
+                    </h2>
+                    <form onSubmit={handleSubmit}>
+                        {isSignup && (
+                            <div className="form-group">
+                                <label>Full Name</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Enter your full name" 
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required 
+                                />
+                            </div>
+                        )}
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input 
+                                type="email" 
+                                placeholder="Enter your email" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required 
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input 
+                                type="password" 
+                                placeholder="Enter your password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required 
+                            />
+                        </div>
+                        <button type="submit" className="btn">
+                            {isSignup ? 'Sign Up' : 'Log In'}
+                        </button>
+                    </form>
+                    <div className="toggle-text">
+                        {isSignup ? 'Already have an account? ' : "Don't have an account? "}
+                        <span className="toggle-link" onClick={() => setIsSignup(!isSignup)}>
+                            {isSignup ? 'Log In' : 'Sign Up'}
+                        </span>
+                    </div>
+                </div>
+            );
+        }
+
+        function DoctorsView({ user, freeConsultations, onSelectDoctor, onLogout }) {
+            const [selectedId, setSelectedId] = useState(null);
+
+            const handleSelect = (doctor) => {
+                setSelectedId(doctor.id);
+            };
+
+            const handleContinue = () => {
+                const doctor = mockDoctors.find(d => d.id === selectedId);
+                if (doctor) {
+                    onSelectDoctor(doctor);
+                }
+            };
+
+            return (
+                <div className="card">
+                    <div className="header">
+                        <div className="logo">
+                            <h1>👶 NeoCare</h1>
+                        </div>
+                        <div className="user-info">
+                            <div className="user-avatar">{user.name[0].toUpperCase()}</div>
+                            <span>{user.name}</span>
+                            <button className="logout-btn" onClick={onLogout}>Logout</button>
+                        </div>
+                    </div>
+                    
+                    {freeConsultations > 0 && (
+                        <div style={{
+                            background: 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)',
+                            color: 'white',
+                            padding: '16px 24px',
+                            borderRadius: '12px',
+                            marginBottom: '24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
+                        }}>
+                            <div>
+                                <div style={{ fontSize: '18px', fontWeight: '600' }}>🎉 You have {freeConsultations} FREE consultation{freeConsultations !== 1 ? 's' : ''} remaining!</div>
+                                <div style={{ fontSize: '14px', opacity: '0.9', marginTop: '4px' }}>Start chatting with our specialists at no cost</div>
+                            </div>
+                            <div style={{ fontSize: '36px', fontWeight: '700' }}>{freeConsultations}</div>
+                        </div>
+                    )}
+                    
+                    {freeConsultations === 0 && (
+                        <div style={{
+                            background: '#fff3cd',
+                            color: '#856404',
+                            padding: '16px 24px',
+                            borderRadius: '12px',
+                            marginBottom: '24px',
+                            border: '2px solid #ffeaa7'
+                        }}>
+                            <div style={{ fontSize: '16px', fontWeight: '600' }}>⚠️ No free consultations remaining</div>
+                            <div style={{ fontSize: '14px', marginTop: '4px' }}>Select a specialist to view payment options</div>
+                        </div>
+                    )}
+                    
+                    <h2>Choose Your Neonatal Specialist</h2>
+                    <p style={{ color: '#666', marginTop: '8px' }}>Select a doctor to start your consultation immediately</p>
+                    
+                    <div className="doctors-grid">
+                        {mockDoctors.map(doctor => (
+                            <div 
+                                key={doctor.id}
+                                className={`doctor-card ${selectedId === doctor.id ? 'selected' : ''}`}
+                                onClick={() => handleSelect(doctor)}
+                            >
+                                <div className="doctor-avatar">{doctor.avatar}</div>
+                                <div className="doctor-name">{doctor.name}</div>
+                                <div className="doctor-specialty">{doctor.specialty}</div>
+                                <div className="doctor-info">
+                                    <div className="info-item">
+                                        <div className="info-label">Experience</div>
+                                        <div className="info-value">{doctor.experience}</div>
+                                    </div>
+                                    <div className="info-item">
+                                        <div className="info-label">Rating</div>
+                                        <div className="info-value">⭐ {doctor.rating}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {selectedId && (
+                        <button className="btn" style={{ marginTop: '30px' }} onClick={handleContinue}>
+                            {freeConsultations > 0 ? 'Start Free Consultation' : 'View Payment Options'}
+                        </button>
+                    )}
+                </div>
+            );
+        }
+
+        function OffersView({ doctor, onSelectPlan, onBack }) {
+            const [showPromoCode, setShowPromoCode] = useState(false);
+            const [promoCode, setPromoCode] = useState('');
+
+            const plans = [
+                { id: 1, name: '5 Consultations Pack', consultations: 5, price: 299, savings: 20 },
+                { id: 2, name: '10 Consultations Pack', consultations: 10, price: 499, savings: 35, popular: true }
+            ];
+
+            return (
+                <div className="card" style={{ maxWidth: '700px', margin: '0 auto' }}>
+                    <button className="back-btn" onClick={onBack}>← Back to Specialists</button>
+                    
+                    <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                        <div style={{ fontSize: '64px', marginBottom: '16px' }}>🚀</div>
+                        <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>You've Reached Your Free Limit!</h2>
+                        <p style={{ color: '#666', fontSize: '16px' }}>Don't lose access to our expert neonatal specialists available 24/7</p>
+                    </div>
+
+                    {doctor && (
+                        <div style={{
+                            background: '#f5f5f5',
+                            padding: '16px 20px',
+                            borderRadius: '12px',
+                            marginBottom: '24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '16px'
+                        }}>
+                            <div className="doctor-avatar" style={{ width: '50px', height: '50px', fontSize: '20px' }}>
+                                {doctor.avatar}
+                            </div>
+                            <div>
+                                <div style={{ fontWeight: '600', fontSize: '16px' }}>Continue with {doctor.name}</div>
+                                <div style={{ color: '#666', fontSize: '13px' }}>{doctor.specialty}</div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '24px',
+                        marginBottom: '32px'
+                    }}>
+                        {/* Promo Code Option */}
+                        <div style={{
+                            border: '3px solid #667eea',
+                            borderRadius: '16px',
+                            padding: '24px',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s',
+                            background: showPromoCode ? '#f0f4ff' : 'white'
+                        }}
+                        onClick={() => setShowPromoCode(true)}>
+                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>🎟️</div>
+                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#667eea' }}>Redeem Promo Code</h3>
+                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
+                                Have a promo code? Get more free consultations instantly
+                            </p>
+                        </div>
+
+                        {/* Buy Pack Option */}
+                        <div style={{
+                            border: '3px solid #4caf50',
+                            borderRadius: '16px',
+                            padding: '24px',
+                            background: 'white'
+                        }}>
+                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>💎</div>
+                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#4caf50' }}>Buy Consultation Pack</h3>
+                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
+                                Unlimited access to specialists 24/7 with our premium packs
+                            </p>
+                        </div>
+                    </div>
+
+                    {showPromoCode && (
+                        <div style={{
+                            background: '#f0f4ff',
+                            padding: '24px',
+                            borderRadius: '12px',
+                            marginBottom: '24px',
+                            animation: 'slideUp 0.3s ease-out'
+                        }}>
+                            <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>Enter Your Promo Code</h3>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <input 
+                                    type="text" 
+                                    placeholder="PROMO-CODE-2024"
+                                    value={promoCode}
+                                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                                    style={{ flex: 1 }}
+                                />
+                                <button className="btn" style={{ width: 'auto', padding: '12px 32px' }}>
+                                    Redeem
+                                </button>
+                            </div>
+                            <p style={{ fontSize: '12px', color: '#666', marginTop: '12px' }}>
+                                💡 Try: WELCOME10 for 10 free consultations
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Pricing Options */}
+                    <div style={{
+                        background: '#f9f9f9',
+                        padding: '24px',
+                        borderRadius: '12px',
+                        marginBottom: '24px'
+                    }}>
+                        <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>Choose Your Plan</h3>
+                        
+                        <div style={{ display: 'grid', gap: '16px' }}>
+                            {plans.map(plan => (
+                                <div 
+                                    key={plan.id}
+                                    style={{
+                                        background: 'white',
+                                        padding: '20px',
+                                        borderRadius: '10px',
+                                        border: plan.popular ? '3px solid #667eea' : '2px solid #e0e0e0',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        position: 'relative'
+                                    }}
+                                >
+                                    {plan.popular && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: '-12px',
+                                            left: '50%',
+                                            transform: 'translateX(-50%)',
+                                            background: '#667eea',
+                                            color: 'white',
+                                            padding: '4px 16px',
+                                            borderRadius: '12px',
+                                            fontSize: '12px',
+                                            fontWeight: '600'
+                                        }}>
+                                            MOST POPULAR
+                                        </div>
+                                    )}
+                                    <div>
+                                        <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '4px' }}>{plan.name}</div>
+                                        <div style={{ color: '#666', fontSize: '14px' }}>
+                                            ${plan.price}{plan.isMonthly ? '/month' : ''} - Save {plan.savings}{typeof plan.savings === 'number' ? '%' : ''}
+                                        </div>
+                                    </div>
+                                    <button 
+                                        className="btn" 
+                                        style={{ width: 'auto', padding: '10px 24px' }}
+                                        onClick={() => onSelectPlan(plan)}
+                                    >
+                                        Select
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <p style={{ textAlign: 'center', fontSize: '12px', color: '#999' }}>
+                        All plans include 24/7 access to certified neonatal specialists
+                    </p>
+                </div>
+            );
+        }
+
+        function PaywallView({ onDismiss, isFirstView = true }) {
+            const [showPromoCode, setShowPromoCode] = useState(false);
+            const [promoCode, setPromoCode] = useState('');
+
+            return (
+                <div className="card" style={{ maxWidth: '700px', margin: '0 auto' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+                        <div style={{ fontSize: '64px', marginBottom: '16px' }}>🚀</div>
+                        <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>You've Reached Your Free Limit!</h2>
+                        <p style={{ color: '#666', fontSize: '16px' }}>Don't lose access to our expert neonatal specialists available 24/7</p>
+                    </div>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '24px',
+                        marginBottom: '32px'
+                    }}>
+                        {/* Promo Code Option */}
+                        <div style={{
+                            border: '3px solid #667eea',
+                            borderRadius: '16px',
+                            padding: '24px',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s',
+                            background: showPromoCode ? '#f0f4ff' : 'white'
+                        }}
+                        onClick={() => setShowPromoCode(true)}>
+                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>🎟️</div>
+                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#667eea' }}>Redeem Promo Code</h3>
+                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
+                                Have a promo code? Get more free consultations instantly
+                            </p>
+                        </div>
+
+                        {/* Buy Pack Option */}
+                        <div style={{
+                            border: '3px solid #4caf50',
+                            borderRadius: '16px',
+                            padding: '24px',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s',
+                            background: 'white'
+                        }}>
+                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>💎</div>
+                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#4caf50' }}>Buy Consultation Pack</h3>
+                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
+                                Unlimited access to specialists 24/7 with our premium packs
+                            </p>
+                        </div>
+                    </div>
+
+                    {showPromoCode && (
+                        <div style={{
+                            background: '#f0f4ff',
+                            padding: '24px',
+                            borderRadius: '12px',
+                            marginBottom: '24px',
+                            animation: 'slideUp 0.3s ease-out'
+                        }}>
+                            <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>Enter Your Promo Code</h3>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <input 
+                                    type="text" 
+                                    placeholder="PROMO-CODE-2024"
+                                    value={promoCode}
+                                    onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                                    style={{ flex: 1 }}
+                                />
+                                <button className="btn" style={{ width: 'auto', padding: '12px 32px' }}>
+                                    Redeem
+                                </button>
+                            </div>
+                            <p style={{ fontSize: '12px', color: '#666', marginTop: '12px' }}>
+                                💡 Try: WELCOME10 for 10 free consultations
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Pricing Options */}
+                    <div style={{
+                        background: '#f9f9f9',
+                        padding: '24px',
+                        borderRadius: '12px',
+                        marginBottom: '24px'
+                    }}>
+                        <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>Choose Your Plan</h3>
+                        
+                        <div style={{ display: 'grid', gap: '16px' }}>
+                            <div style={{
+                                background: 'white',
+                                padding: '20px',
+                                borderRadius: '10px',
+                                border: '2px solid #e0e0e0',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '4px' }}>5 Consultations Pack</div>
+                                    <div style={{ color: '#666', fontSize: '14px' }}>$299 - Save 20%</div>
+                                </div>
+                                <button className="btn" style={{ width: 'auto', padding: '10px 24px' }}>
+                                    Select
+                                </button>
+                            </div>
+
+                            <div style={{
+                                background: 'white',
+                                padding: '20px',
+                                borderRadius: '10px',
+                                border: '3px solid #667eea',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                position: 'relative'
+                            }}>
+                                <div style={{
+                                    position: 'absolute',
+                                    top: '-12px',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    background: '#667eea',
+                                    color: 'white',
+                                    padding: '4px 16px',
+                                    borderRadius: '12px',
+                                    fontSize: '12px',
+                                    fontWeight: '600'
+                                }}>
+                                    MOST POPULAR
+                                </div>
+                                <div>
+                                    <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '4px' }}>10 Consultations Pack</div>
+                                    <div style={{ color: '#666', fontSize: '14px' }}>$499 - Save 35%</div>
+                                </div>
+                                <button className="btn" style={{ width: 'auto', padding: '10px 24px' }}>
+                                    Select
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main CTA - Different based on first view or subsequent */}
+                    {isFirstView ? (
+                        <button 
+                            className="btn" 
+                            onClick={onDismiss}
+                            style={{ marginTop: '16px' }}
+                        >
+                            Skip for Now, Back to Hub
+                        </button>
+                    ) : (
+                        <button 
+                            className="btn btn-secondary" 
+                            onClick={onDismiss}
+                            style={{ marginTop: '16px' }}
+                        >
+                            ← Back to Specialists
+                        </button>
+                    )}
+
+                    <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '20px' }}>
+                        All plans include 24/7 access to certified neonatal specialists
+                    </p>
+                </div>
+            );
+        }
+
+        function PaymentView({ doctor, plan, user, onBack, onPaymentComplete }) {
+            const [cardNumber, setCardNumber] = useState('');
+            const [expiry, setExpiry] = useState('');
+            const [cvc, setCvc] = useState('');
+            const [name, setName] = useState(user.name);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                onPaymentComplete();
+            };
+
+            const totalAmount = plan ? plan.price : (doctor ? doctor.price + 5 : 80);
+
+            return (
+                <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                    <button className="back-btn" onClick={onBack}>← Back to Plans</button>
+                    
+                    <div className="logo">
+                        <h1>👶 NeoCare</h1>
+                    </div>
+                    
+                    <h2>Complete Your Purchase</h2>
+                    <p style={{ color: '#666', marginTop: '8px' }}>Secure payment powered by Stripe</p>
+
+                    <div className="payment-summary">
+                        {doctor && (
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #ddd' }}>
+                                <div className="doctor-avatar" style={{ width: '50px', height: '50px', fontSize: '20px' }}>
+                                    {doctor.avatar}
+                                </div>
+                                <div style={{ marginLeft: '16px' }}>
+                                    <div style={{ fontWeight: '600', fontSize: '16px' }}>{doctor.name}</div>
+                                    <div style={{ color: '#666', fontSize: '13px' }}>{doctor.specialty}</div>
+                                </div>
+                            </div>
+                        )}
+                        
+                        {plan && (
+                            <div style={{ marginBottom: '16px' }}>
+                                <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '8px', color: '#667eea' }}>
+                                    {plan.name}
+                                </div>
+                                <div style={{ color: '#666', fontSize: '14px' }}>
+                                    {plan.consultations} consultations • Save {plan.savings}{typeof plan.savings === 'number' ? '%' : ''}
+                                </div>
+                            </div>
+                        )}
+                        
+                        <div className="summary-row">
+                            <span>{plan ? 'Plan Price' : 'Consultation Fee'}</span>
+                            <span>${plan ? plan.price : doctor.price}.00</span>
+                        </div>
+                        {!plan && (
+                            <div className="summary-row">
+                                <span>Service Fee</span>
+                                <span>$5.00</span>
+                            </div>
+                        )}
+                        <div className="summary-row total">
+                            <span>Total</span>
+                            <span>${totalAmount}.00</span>
+                        </div>
+                    </div>
+
+                    <form onSubmit={handleSubmit}>
+                        <div className="stripe-form">
+                            <h3 style={{ marginBottom: '16px', fontSize: '16px' }}>💳 Payment Details</h3>
+                            
+                            <div className="form-group">
+                                <label>Card Number</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="4242 4242 4242 4242" 
+                                    value={cardNumber}
+                                    onChange={(e) => setCardNumber(e.target.value)}
+                                    maxLength="19"
+                                    required 
+                                />
+                            </div>
+                            
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                <div className="form-group">
+                                    <label>Expiry Date</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="MM/YY" 
+                                        value={expiry}
+                                        onChange={(e) => setExpiry(e.target.value)}
+                                        maxLength="5"
+                                        required 
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>CVC</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="123" 
+                                        value={cvc}
+                                        onChange={(e) => setCvc(e.target.value)}
+                                        maxLength="3"
+                                        required 
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="form-group">
+                                <label>Cardholder Name</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Name on card" 
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required 
+                                />
+                            </div>
+                        </div>
+
+                        <button type="submit" className="btn">
+                            Pay ${totalAmount} {plan ? '& Get Access' : '& Start Consultation'}
+                        </button>
+                    </form>
+
+                    <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '16px' }}>
+                        🔒 Secured by Stripe · Your payment information is encrypted
+                    </p>
+                </div>
+            );
+        }
+
+        function ConsultationView({ doctor, user, onEndCall }) {
+            const [messages, setMessages] = useState([
+                { sender: 'System', text: 'Consultation started. Your specialist is ready to help!', isSystem: true },
+                { sender: doctor.name, text: `Hello! I'm ${doctor.name}, your neonatal specialist. How can I help you today?`, isDoctor: true }
+            ]);
+            const [newMessage, setNewMessage] = useState('');
+            const [isTyping, setIsTyping] = useState(false);
+
+            const sendMessage = () => {
+                if (newMessage.trim()) {
+                    setMessages([...messages, { sender: user.name, text: newMessage, isDoctor: false }]);
+                    setNewMessage('');
+                    setIsTyping(true);
+                    
+                    // Simulate doctor response
+                    setTimeout(() => {
+                        setIsTyping(false);
+                        const responses = [
+                            "I understand your concern. Can you provide more details?",
+                            "That's a common question among new parents. Let me explain...",
+                            "Based on what you're describing, here's what I recommend...",
+                            "Great question! In neonatal care, we typically approach this by..."
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        setMessages(prev => [...prev, { 
+                            sender: doctor.name, 
+                            text: randomResponse, 
+                            isDoctor: true 
+                        }]);
+                    }, 1500);
+                }
+            };
+
+            const handleKeyPress = (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            };
+
+            return (
+                <div className="card">
+                    <div className="header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                            <div className="doctor-avatar" style={{ width: '60px', height: '60px', fontSize: '28px' }}>
+                                {doctor.avatar}
+                            </div>
+                            <div>
+                                <h2 style={{ marginBottom: '4px' }}>Chat with {doctor.name} <span className="status-badge">● LIVE</span></h2>
+                                <p style={{ color: '#666', fontSize: '14px' }}>{doctor.specialty}</p>
+                            </div>
+                        </div>
+                        <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontSize: '18px', fontWeight: '600', color: '#667eea' }}>
+                                {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#999' }}>Active now</div>
+                        </div>
+                    </div>
+
+                    <div style={{
+                        background: '#f5f5f5',
+                        borderRadius: '12px',
+                        height: '500px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        overflow: 'hidden'
+                    }}>
+                        <div style={{
+                            flex: 1,
+                            overflowY: 'auto',
+                            padding: '20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '12px'
+                        }}>
+                            {messages.map((msg, idx) => (
+                                <div 
+                                    key={idx} 
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: msg.isDoctor || msg.isSystem ? 'flex-start' : 'flex-end'
+                                    }}
+                                >
+                                    <div style={{
+                                        maxWidth: '70%',
+                                        background: msg.isSystem ? '#fff3cd' : msg.isDoctor ? 'white' : '#667eea',
+                                        color: msg.isSystem ? '#856404' : msg.isDoctor ? '#333' : 'white',
+                                        padding: '12px 16px',
+                                        borderRadius: msg.isDoctor ? '16px 16px 16px 4px' : msg.isSystem ? '8px' : '16px 16px 4px 16px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                                    }}>
+                                        {!msg.isSystem && (
+                                            <div style={{ 
+                                                fontWeight: '600', 
+                                                fontSize: '12px', 
+                                                marginBottom: '4px',
+                                                opacity: 0.8
+                                            }}>
+                                                {msg.sender}
+                                            </div>
+                                        )}
+                                        <div style={{ fontSize: '15px', lineHeight: '1.5' }}>{msg.text}</div>
+                                    </div>
+                                </div>
+                            ))}
+                            {isTyping && (
+                                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                                    <div style={{
+                                        background: 'white',
+                                        padding: '12px 16px',
+                                        borderRadius: '16px 16px 16px 4px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                                    }}>
+                                        <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                                            <div className="typing-dot"></div>
+                                            <div className="typing-dot"></div>
+                                            <div className="typing-dot"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div style={{
+                            padding: '20px',
+                            background: 'white',
+                            borderTop: '2px solid #e0e0e0'
+                        }}>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Type your message..."
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    style={{
+                                        flex: 1,
+                                        padding: '12px 16px',
+                                        border: '2px solid #e0e0e0',
+                                        borderRadius: '24px',
+                                        fontSize: '15px'
+                                    }}
+                                />
+                                <button 
+                                    onClick={sendMessage}
+                                    disabled={!newMessage.trim()}
+                                    style={{
+                                        padding: '12px 24px',
+                                        background: newMessage.trim() ? '#667eea' : '#ccc',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '24px',
+                                        cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
+                                        fontWeight: '600',
+                                        fontSize: '15px',
+                                        transition: 'all 0.3s'
+                                    }}
+                                >
+                                    Send 📤
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button 
+                        className="btn btn-secondary" 
+                        style={{ marginTop: '20px' }} 
+                        onClick={onEndCall}
+                    >
+                        End Consultation
+                    </button>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
