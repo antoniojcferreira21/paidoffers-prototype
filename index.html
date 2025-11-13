@@ -16,21 +16,49 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 20px;
         }
 
         .app-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 32px;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 24px;
+            margin-top: 20px;
+        }
+
+        .tab {
+            padding: 12px 0;
+            font-size: 15px;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #2C3E50;
+            border-bottom-color: #2C3E50;
+        }
+
+        .tab:hover {
+            color: #2C3E50;
         }
 
         .card {
             background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             animation: slideUp 0.3s ease-out;
         }
 
@@ -51,14 +79,26 @@
         }
 
         .logo h1 {
-            color: #667eea;
+            color: #2C3E50;
             font-size: 32px;
             margin-bottom: 8px;
         }
 
         .logo p {
-            color: #666;
+            color: #6c757d;
             font-size: 14px;
+        }
+
+        .client-logo {
+            width: 120px;
+            height: auto;
+            margin: 0 auto 24px;
+            display: block;
+        }
+
+        .client-logo-small {
+            height: 32px;
+            width: auto;
         }
 
         .form-group {
@@ -75,48 +115,50 @@
         input {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e0e0e0;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
             font-size: 16px;
             transition: border-color 0.3s;
+            background: #ffffff;
         }
 
         input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #2C3E50;
         }
 
         .btn {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2C3E50;
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background 0.3s, box-shadow 0.2s;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            background: #34495e;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
         }
 
         .btn:active {
-            transform: translateY(0);
+            background: #1a252f;
         }
 
         .btn-secondary {
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #2C3E50;
+            border: 2px solid #2C3E50;
             margin-top: 10px;
         }
 
         .btn-secondary:hover {
-            background: #f5f5f5;
+            background: #f5f7fa;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
         }
 
         .doctors-grid {
@@ -128,74 +170,103 @@
 
         .doctor-card {
             background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 24px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .doctor-card:hover {
-            border-color: #667eea;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(102, 126, 234, 0.2);
+            border-color: #2C3E50;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.1);
         }
 
         .doctor-card.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
+            border-color: #2C3E50;
+            background: #f8f9fa;
         }
 
         .doctor-avatar {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #e5e7eb;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: white;
-            margin: 0 auto 16px;
+            font-size: 24px;
+            color: #6c757d;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .doctor-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .online-status {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border: 2px solid white;
+            border-radius: 50%;
         }
 
         .doctor-name {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
-            color: #333;
+            color: #2C3E50;
             text-align: center;
-            margin-bottom: 8px;
+            margin: 0;
+            line-height: 1.4;
         }
 
         .doctor-specialty {
-            font-size: 14px;
-            color: #666;
+            font-size: 13px;
+            color: #6c757d;
             text-align: center;
-            margin-bottom: 12px;
+            margin: 0;
+            line-height: 1.4;
         }
 
         .doctor-info {
             display: flex;
             justify-content: space-around;
-            padding-top: 12px;
-            border-top: 1px solid #e0e0e0;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
             margin-top: 12px;
+            gap: 16px;
         }
 
         .info-item {
             text-align: center;
+            flex: 1;
         }
 
         .info-label {
-            font-size: 12px;
-            color: #999;
+            font-size: 11px;
+            color: #9ca3af;
             margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .info-value {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: #333;
+            color: #2C3E50;
         }
 
         .price-tag {
@@ -215,6 +286,24 @@
             margin-bottom: 30px;
         }
 
+        .app-header {
+            background: #2C3E50;
+            color: white;
+            padding: 16px 32px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+            color: white;
+        }
+
         .user-info {
             display: flex;
             align-items: center;
@@ -225,7 +314,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #667eea;
+            background: #2C3E50;
             color: white;
             display: flex;
             align-items: center;
@@ -236,8 +325,8 @@
         .logout-btn {
             padding: 8px 16px;
             background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #2C3E50;
+            border: 1px solid #d1d5db;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
@@ -245,8 +334,9 @@
         }
 
         .logout-btn:hover {
-            background: #667eea;
+            background: #2C3E50;
             color: white;
+            border-color: #2C3E50;
         }
 
         .payment-summary {
@@ -266,7 +356,7 @@
         .summary-row.total {
             font-size: 20px;
             font-weight: 600;
-            color: #667eea;
+            color: #2C3E50;
             padding-top: 12px;
             border-top: 2px solid #ddd;
             margin-top: 12px;
@@ -387,7 +477,7 @@
 
         .send-btn {
             padding: 12px 24px;
-            background: #667eea;
+            background: #2C3E50;
             color: white;
             border: none;
             border-radius: 8px;
@@ -408,8 +498,8 @@
 
         .back-btn {
             background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
+            color: #2C3E50;
+            border: 1px solid #d1d5db;
             padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
@@ -419,8 +509,9 @@
         }
 
         .back-btn:hover {
-            background: #667eea;
+            background: #2C3E50;
             color: white;
+            border-color: #2C3E50;
         }
 
         .toggle-text {
@@ -430,7 +521,7 @@
         }
 
         .toggle-link {
-            color: #667eea;
+            color: #2C3E50;
             cursor: pointer;
             font-weight: 600;
             text-decoration: none;
@@ -447,7 +538,7 @@
 
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border-top: 4px solid #2C3E50;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -657,9 +748,15 @@
 
             return (
                 <div className="card" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+                        alt="McDonald's"
+                        className="client-logo"
+                    />
                     <div className="logo">
                         <h1>👶 NeoCare</h1>
                         <p>Expert Neonatal Care, Anytime</p>
+                        <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '8px' }}>Powered by McDonald's Employee Benefits</p>
                     </div>
                     <h2 style={{ marginBottom: '24px', textAlign: 'center' }}>
                         {isSignup ? 'Create Account' : 'Welcome Back'}
@@ -719,33 +816,39 @@
 
             return (
                 <div className="card">
-                    <div className="header">
-                        <div className="logo">
+                    <div className="app-header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+                                alt="McDonald's"
+                                className="client-logo-small"
+                            />
                             <h1>👶 NeoCare</h1>
                         </div>
                         <div className="user-info">
-                            <div className="user-avatar">{user.name[0].toUpperCase()}</div>
-                            <span>{user.name}</span>
-                            <button className="logout-btn" onClick={onLogout}>Logout</button>
+                            <span style={{ color: 'white', marginRight: '12px' }}>{user.name}</span>
+                            <button className="logout-btn" onClick={onLogout} style={{ background: 'transparent', color: 'white', borderColor: 'rgba(255,255,255,0.3)' }}>Logout</button>
                         </div>
                     </div>
+                    <div style={{ padding: '0 8px' }}>
                     
                     {freeConsultations > 0 && (
                         <div style={{
-                            background: 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)',
+                            background: '#10b981',
                             color: 'white',
-                            padding: '16px 24px',
-                            borderRadius: '12px',
-                            marginBottom: '24px',
+                            padding: '14px 20px',
+                            borderRadius: '8px',
+                            marginBottom: '20px',
+                            marginTop: '20px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between'
                         }}>
                             <div>
-                                <div style={{ fontSize: '18px', fontWeight: '600' }}>🎉 You have {freeConsultations} FREE consultation{freeConsultations !== 1 ? 's' : ''} remaining!</div>
-                                <div style={{ fontSize: '14px', opacity: '0.9', marginTop: '4px' }}>Start chatting with our specialists at no cost</div>
+                                <div style={{ fontSize: '16px', fontWeight: '600' }}>You have {freeConsultations} FREE consultation{freeConsultations !== 1 ? 's' : ''} available</div>
+                                <div style={{ fontSize: '13px', opacity: '0.9', marginTop: '4px' }}>Tienes {freeConsultations} consulta{freeConsultations !== 1 ? 's' : ''} disponible{freeConsultations !== 1 ? 's' : ''}</div>
                             </div>
-                            <div style={{ fontSize: '36px', fontWeight: '700' }}>{freeConsultations}</div>
+                            <div style={{ fontSize: '32px', fontWeight: '700' }}>{freeConsultations}</div>
                         </div>
                     )}
                     
@@ -753,18 +856,27 @@
                         <div style={{
                             background: '#fff3cd',
                             color: '#856404',
-                            padding: '16px 24px',
-                            borderRadius: '12px',
-                            marginBottom: '24px',
-                            border: '2px solid #ffeaa7'
+                            padding: '14px 20px',
+                            borderRadius: '8px',
+                            marginBottom: '20px',
+                            marginTop: '20px',
+                            border: '1px solid #ffeaa7'
                         }}>
-                            <div style={{ fontSize: '16px', fontWeight: '600' }}>⚠️ No free consultations remaining</div>
-                            <div style={{ fontSize: '14px', marginTop: '4px' }}>Select a specialist to view payment options</div>
+                            <div style={{ fontSize: '15px', fontWeight: '600' }}>⚠️ No free consultations remaining</div>
+                            <div style={{ fontSize: '13px', marginTop: '4px' }}>Select a specialist to view payment options</div>
                         </div>
                     )}
-                    
-                    <h2>Choose Your Neonatal Specialist</h2>
-                    <p style={{ color: '#666', marginTop: '8px' }}>Click on a specialist to continue</p>
+
+                    <div className="tabs-container">
+                        <div className="tab active">Disponibles</div>
+                        <div className="tab">Finalizadas</div>
+                    </div>
+
+                    <div style={{ marginBottom: '16px' }}>
+                        <div style={{ fontSize: '14px', color: '#6c757d' }}>Tienes {freeConsultations > 0 ? freeConsultations : 0} consultas disponibles</div>
+                    </div>
+
+                    <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#2C3E50', marginBottom: '16px' }}>Nueva consulta por chat</h3>
                     
                     <div className="doctors-grid">
                         {mockDoctors.map(doctor => (
@@ -773,7 +885,10 @@
                                 className="doctor-card"
                                 onClick={() => handleSelect(doctor)}
                             >
-                                <div className="doctor-avatar">{doctor.avatar}</div>
+                                <div className="doctor-avatar">
+                                    {doctor.avatar}
+                                    <div className="online-status"></div>
+                                </div>
                                 <div className="doctor-name">{doctor.name}</div>
                                 <div className="doctor-specialty">{doctor.specialty}</div>
                                 <div className="doctor-info">
@@ -788,6 +903,7 @@
                                 </div>
                             </div>
                         ))}
+                    </div>
                     </div>
                 </div>
             );
@@ -804,8 +920,13 @@
 
             return (
                 <div className="card" style={{ maxWidth: '700px', margin: '0 auto' }}>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+                        alt="McDonald's"
+                        style={{ width: '80px', height: 'auto', margin: '0 auto 16px', display: 'block' }}
+                    />
                     <button className="back-btn" onClick={onBack}>← Back to Specialists</button>
-                    
+
                     <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                         <div style={{ fontSize: '64px', marginBottom: '16px' }}>🚀</div>
                         <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>You've Reached Your Free Limit!</h2>
@@ -840,16 +961,16 @@
                     }}>
                         {/* Promo Code Option */}
                         <div style={{
-                            border: '3px solid #667eea',
+                            border: '2px solid #2C3E50',
                             borderRadius: '16px',
                             padding: '24px',
                             cursor: 'pointer',
                             transition: 'all 0.3s',
-                            background: showPromoCode ? '#f0f4ff' : 'white'
+                            background: showPromoCode ? '#f8f9fa' : 'white'
                         }}
                         onClick={() => setShowPromoCode(true)}>
                             <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>🎟️</div>
-                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#667eea' }}>Redeem Promo Code</h3>
+                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#2C3E50' }}>Redeem Promo Code</h3>
                             <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
                                 Have a promo code? Get more free consultations instantly
                             </p>
@@ -914,7 +1035,7 @@
                                         background: 'white',
                                         padding: '20px',
                                         borderRadius: '10px',
-                                        border: plan.popular ? '3px solid #667eea' : '2px solid #e0e0e0',
+                                        border: plan.popular ? '2px solid #2C3E50' : '2px solid #e0e0e0',
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
@@ -927,7 +1048,7 @@
                                             top: '-12px',
                                             left: '50%',
                                             transform: 'translateX(-50%)',
-                                            background: '#667eea',
+                                            background: '#2C3E50',
                                             color: 'white',
                                             padding: '4px 16px',
                                             borderRadius: '12px',
@@ -968,6 +1089,11 @@
 
             return (
                 <div className="card" style={{ maxWidth: '700px', margin: '0 auto' }}>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+                        alt="McDonald's"
+                        style={{ width: '80px', height: 'auto', margin: '0 auto 16px', display: 'block' }}
+                    />
                     <div style={{ textAlign: 'center', marginBottom: '30px' }}>
                         <div style={{ fontSize: '64px', marginBottom: '16px' }}>🚀</div>
                         <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>You've Reached Your Free Limit!</h2>
@@ -982,16 +1108,16 @@
                     }}>
                         {/* Promo Code Option */}
                         <div style={{
-                            border: '3px solid #667eea',
+                            border: '2px solid #2C3E50',
                             borderRadius: '16px',
                             padding: '24px',
                             cursor: 'pointer',
                             transition: 'all 0.3s',
-                            background: showPromoCode ? '#f0f4ff' : 'white'
+                            background: showPromoCode ? '#f8f9fa' : 'white'
                         }}
                         onClick={() => setShowPromoCode(true)}>
                             <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>🎟️</div>
-                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#667eea' }}>Redeem Promo Code</h3>
+                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#2C3E50' }}>Redeem Promo Code</h3>
                             <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
                                 Have a promo code? Get more free consultations instantly
                             </p>
@@ -1073,7 +1199,7 @@
                                 background: 'white',
                                 padding: '20px',
                                 borderRadius: '10px',
-                                border: '3px solid #667eea',
+                                border: '2px solid #2C3E50',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
@@ -1084,7 +1210,7 @@
                                     top: '-12px',
                                     left: '50%',
                                     transform: 'translateX(-50%)',
-                                    background: '#667eea',
+                                    background: '#2C3E50',
                                     color: 'white',
                                     padding: '4px 16px',
                                     borderRadius: '12px',
@@ -1145,8 +1271,13 @@
 
             return (
                 <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                    <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+                        alt="McDonald's"
+                        style={{ width: '80px', height: 'auto', margin: '0 auto 16px', display: 'block' }}
+                    />
                     <button className="back-btn" onClick={onBack}>← Back to Plans</button>
-                    
+
                     <div className="logo">
                         <h1>👶 NeoCare</h1>
                     </div>
@@ -1169,7 +1300,7 @@
                         
                         {plan && (
                             <div style={{ marginBottom: '16px' }}>
-                                <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '8px', color: '#667eea' }}>
+                                <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '8px', color: '#2C3E50' }}>
                                     {plan.name}
                                 </div>
                                 <div style={{ color: '#666', fontSize: '14px' }}>
@@ -1301,31 +1432,44 @@
 
             return (
                 <div className="card">
-                    <div className="header">
+                    <div className="app-header">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                            <div className="doctor-avatar" style={{ width: '60px', height: '60px', fontSize: '28px' }}>
+                            <img
+                                src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+                                alt="McDonald's"
+                                className="client-logo-small"
+                            />
+                            <div className="doctor-avatar" style={{ width: '50px', height: '50px', fontSize: '24px' }}>
                                 {doctor.avatar}
+                                <div className="online-status"></div>
                             </div>
                             <div>
-                                <h2 style={{ marginBottom: '4px' }}>Chat with {doctor.name} <span className="status-badge">● LIVE</span></h2>
-                                <p style={{ color: '#666', fontSize: '14px' }}>{doctor.specialty}</p>
+                                <h2 style={{ marginBottom: '4px', fontSize: '18px', color: 'white' }}>{doctor.name}</h2>
+                                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', margin: 0 }}>{doctor.specialty}</p>
                             </div>
                         </div>
-                        <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '18px', fontWeight: '600', color: '#667eea' }}>
-                                {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </div>
-                            <div style={{ fontSize: '12px', color: '#999' }}>Active now</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{
+                                background: 'rgba(255,255,255,0.15)',
+                                padding: '6px 12px',
+                                borderRadius: '6px',
+                                fontSize: '13px',
+                                color: 'white'
+                            }}>hoy</div>
+                            <span className="status-badge" style={{ background: '#10b981', marginLeft: 0 }}>● LIVE</span>
                         </div>
                     </div>
+                    <div style={{ padding: '0 8px' }}>
 
                     <div style={{
-                        background: '#f5f5f5',
-                        borderRadius: '12px',
+                        background: '#f8f9fa',
+                        borderRadius: '8px',
                         height: '500px',
                         display: 'flex',
                         flexDirection: 'column',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        marginTop: '20px',
+                        border: '1px solid #e5e7eb'
                     }}>
                         <div style={{
                             flex: 1,
@@ -1345,11 +1489,12 @@
                                 >
                                     <div style={{
                                         maxWidth: '70%',
-                                        background: msg.isSystem ? '#fff3cd' : msg.isDoctor ? 'white' : '#667eea',
-                                        color: msg.isSystem ? '#856404' : msg.isDoctor ? '#333' : 'white',
-                                        padding: '12px 16px',
-                                        borderRadius: msg.isDoctor ? '16px 16px 16px 4px' : msg.isSystem ? '8px' : '16px 16px 4px 16px',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                                        background: msg.isSystem ? '#fff3cd' : msg.isDoctor ? 'white' : '#2C3E50',
+                                        color: msg.isSystem ? '#856404' : msg.isDoctor ? '#2C3E50' : 'white',
+                                        padding: '10px 14px',
+                                        borderRadius: msg.isDoctor ? '12px 12px 12px 2px' : msg.isSystem ? '8px' : '12px 12px 2px 12px',
+                                        boxShadow: msg.isDoctor ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                                        border: msg.isDoctor ? '1px solid #e5e7eb' : 'none'
                                     }}>
                                         {!msg.isSystem && (
                                             <div style={{ 
@@ -1384,53 +1529,58 @@
                         </div>
 
                         <div style={{
-                            padding: '20px',
+                            padding: '16px',
                             background: 'white',
-                            borderTop: '2px solid #e0e0e0'
+                            borderTop: '1px solid #e5e7eb'
                         }}>
-                            <div style={{ display: 'flex', gap: '12px' }}>
-                                <input 
-                                    type="text" 
-                                    placeholder="Type your message..."
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <input
+                                    type="text"
+                                    placeholder="Escribe aquí..."
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
                                     onKeyPress={handleKeyPress}
                                     style={{
                                         flex: 1,
-                                        padding: '12px 16px',
-                                        border: '2px solid #e0e0e0',
-                                        borderRadius: '24px',
-                                        fontSize: '15px'
+                                        padding: '10px 16px',
+                                        border: '1px solid #d1d5db',
+                                        borderRadius: '20px',
+                                        fontSize: '14px',
+                                        background: '#f8f9fa'
                                     }}
                                 />
-                                <button 
+                                <button
                                     onClick={sendMessage}
                                     disabled={!newMessage.trim()}
                                     style={{
-                                        padding: '12px 24px',
-                                        background: newMessage.trim() ? '#667eea' : '#ccc',
+                                        width: '40px',
+                                        height: '40px',
+                                        background: newMessage.trim() ? '#2C3E50' : '#d1d5db',
                                         color: 'white',
                                         border: 'none',
-                                        borderRadius: '24px',
+                                        borderRadius: '50%',
                                         cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
-                                        fontWeight: '600',
-                                        fontSize: '15px',
-                                        transition: 'all 0.3s'
+                                        fontSize: '18px',
+                                        transition: 'all 0.3s',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
                                     }}
                                 >
-                                    Send 📤
+                                    ➤
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <button 
-                        className="btn btn-secondary" 
-                        style={{ marginTop: '20px' }} 
+                    <button
+                        className="btn btn-secondary"
+                        style={{ marginTop: '20px' }}
                         onClick={onEndCall}
                     >
                         End Consultation
                     </button>
+                    </div>
                 </div>
             );
         }
