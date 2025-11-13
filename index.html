@@ -712,17 +712,9 @@
         }
 
         function DoctorsView({ user, freeConsultations, onSelectDoctor, onLogout }) {
-            const [selectedId, setSelectedId] = useState(null);
-
             const handleSelect = (doctor) => {
-                setSelectedId(doctor.id);
-            };
-
-            const handleContinue = () => {
-                const doctor = mockDoctors.find(d => d.id === selectedId);
-                if (doctor) {
-                    onSelectDoctor(doctor);
-                }
+                // Immediately navigate when card is clicked
+                onSelectDoctor(doctor);
             };
 
             return (
@@ -772,13 +764,13 @@
                     )}
                     
                     <h2>Choose Your Neonatal Specialist</h2>
-                    <p style={{ color: '#666', marginTop: '8px' }}>Select a doctor to start your consultation immediately</p>
+                    <p style={{ color: '#666', marginTop: '8px' }}>Click on a specialist to continue</p>
                     
                     <div className="doctors-grid">
                         {mockDoctors.map(doctor => (
-                            <div 
+                            <div
                                 key={doctor.id}
-                                className={`doctor-card ${selectedId === doctor.id ? 'selected' : ''}`}
+                                className="doctor-card"
                                 onClick={() => handleSelect(doctor)}
                             >
                                 <div className="doctor-avatar">{doctor.avatar}</div>
@@ -797,12 +789,6 @@
                             </div>
                         ))}
                     </div>
-
-                    {selectedId && (
-                        <button className="btn" style={{ marginTop: '30px' }} onClick={handleContinue}>
-                            {freeConsultations > 0 ? 'Start Free Consultation' : 'View Payment Options'}
-                        </button>
-                    )}
                 </div>
             );
         }
