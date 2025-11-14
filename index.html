@@ -711,7 +711,9 @@
                         }
                         setTimeout(() => {
                             setIsProcessing(false);
-                            setCurrentView('consultation');
+                            setSelectedDoctor(null);
+                            setSelectedPlan(null);
+                            setCurrentView('doctors');
                         }, 2000);
                     }}
                 />,
