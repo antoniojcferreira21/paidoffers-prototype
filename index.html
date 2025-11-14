@@ -662,8 +662,11 @@
             const handlePaywallDismiss = (skipToCheckout = false) => {
                 setHasSeenFirstPaywall(true);
                 if (skipToCheckout) {
-                    // User clicked "Continue to Checkout" - go to offers page
-                    setCurrentView('offers');
+                    // User clicked "Continue to Checkout" - go straight to payment
+                    // Set the default plan
+                    const defaultPlan = { id: 1, name: 'Consultation Bundle', consultations: 10, price: 99 };
+                    setSelectedPlan(defaultPlan);
+                    setCurrentView('payment');
                 } else {
                     // User clicked "Skip for Now" - go back to doctors hub
                     setCurrentView('doctors');
@@ -677,18 +680,18 @@
 
             const views = {
                 login: <LoginView onLogin={setUser} />,
-                doctors: <DoctorsView 
-                    user={user} 
+                doctors: user ? <DoctorsView
+                    user={user}
                     freeConsultations={freeConsultations}
-                    onSelectDoctor={handleDoctorSelect} 
-                    onLogout={() => { 
-                        setUser(null); 
-                        setCurrentView('login'); 
-                        setFreeConsultations(1); 
-                        setHasUsedFirstConsultation(false); 
+                    onSelectDoctor={handleDoctorSelect}
+                    onLogout={() => {
+                        setUser(null);
+                        setCurrentView('login');
+                        setFreeConsultations(1);
+                        setHasUsedFirstConsultation(false);
                         setHasSeenFirstPaywall(false);
-                    }} 
-                />,
+                    }}
+                /> : <LoginView onLogin={setUser} />,
                 paywall: <PaywallView 
                     onDismiss={handlePaywallDismiss}
                     isFirstView={!hasSeenFirstPaywall}
@@ -702,18 +705,32 @@
                     doctor={selectedDoctor}
                     plan={selectedPlan}
                     user={user}
-                    onBack={() => setCurrentView('offers')}
-                    onPaymentComplete={() => {
-                        setIsProcessing(true);
-                        // Add purchased consultations to user's account
-                        if (selectedPlan) {
-                            setFreeConsultations(freeConsultations + selectedPlan.consultations);
-                        }
-                        setTimeout(() => {
-                            setIsProcessing(false);
-                            setSelectedDoctor(null);
-                            setSelectedPlan(null);
+                    onBack={() => {
+                        // If came from paywall, go back to doctors hub, otherwise go to offers
+                        if (hasSeenFirstPaywall && freeConsultations === 0) {
                             setCurrentView('doctors');
+                        } else {
+                            setCurrentView('offers');
+                        }
+                    }}
+                    onPaymentComplete={() => {
+                        // Capture values before state changes
+                        const consultationsToAdd = selectedPlan ? selectedPlan.consultations : 0;
+
+                        setIsProcessing(true);
+
+                        setTimeout(() => {
+                            // Update consultations count
+                            setFreeConsultations(prev => prev + consultationsToAdd);
+                            // Change view first
+                            setCurrentView('doctors');
+                            // Then stop processing
+                            setIsProcessing(false);
+                            // Clear selections after view change
+                            setTimeout(() => {
+                                setSelectedDoctor(null);
+                                setSelectedPlan(null);
+                            }, 100);
                         }, 2000);
                     }}
                 />,
@@ -740,7 +757,7 @@
                                 <p>Please wait while we confirm your booking</p>
                             </div>
                         </div>
-                    ) : views[currentView]}
+                    ) : (views[currentView] || views['doctors'])}
                 </div>
             );
         }
