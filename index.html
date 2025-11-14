@@ -645,9 +645,12 @@
             };
 
             const handleEndConsultation = () => {
-                // If this was a free consultation and user hasn't seen paywall yet
-                if (freeConsultations > 0 && !hasUsedFirstConsultation) {
-                    setFreeConsultations(0);
+                // Decrement consultation count
+                const remainingConsultations = freeConsultations - 1;
+                setFreeConsultations(remainingConsultations);
+
+                // If this was the first free consultation, show paywall
+                if (freeConsultations === 1 && !hasUsedFirstConsultation) {
                     setHasUsedFirstConsultation(true);
                     setCurrentView('paywall');
                 } else {
@@ -695,18 +698,22 @@
                     onSelectPlan={handlePlanSelect}
                     onBack={() => setCurrentView('doctors')}
                 />,
-                payment: <PaymentView 
+                payment: <PaymentView
                     doctor={selectedDoctor}
                     plan={selectedPlan}
-                    user={user} 
-                    onBack={() => setCurrentView('offers')} 
-                    onPaymentComplete={() => { 
-                        setIsProcessing(true); 
-                        setTimeout(() => { 
-                            setIsProcessing(false); 
-                            setCurrentView('consultation'); 
-                        }, 2000); 
-                    }} 
+                    user={user}
+                    onBack={() => setCurrentView('offers')}
+                    onPaymentComplete={() => {
+                        setIsProcessing(true);
+                        // Add purchased consultations to user's account
+                        if (selectedPlan) {
+                            setFreeConsultations(freeConsultations + selectedPlan.consultations);
+                        }
+                        setTimeout(() => {
+                            setIsProcessing(false);
+                            setCurrentView('consultation');
+                        }, 2000);
+                    }}
                 />,
                 consultation: <ConsultationView 
                     doctor={selectedDoctor} 
