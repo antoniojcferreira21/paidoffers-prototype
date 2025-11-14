@@ -913,13 +913,15 @@
             const [showPromoCode, setShowPromoCode] = useState(false);
             const [promoCode, setPromoCode] = useState('');
 
-            const plans = [
-                { id: 1, name: '5 Consultations Pack', consultations: 5, price: 299, savings: 20 },
-                { id: 2, name: '10 Consultations Pack', consultations: 10, price: 499, savings: 35, popular: true }
-            ];
+            // Fixed price per client/flow
+            const fixedPlan = { id: 1, name: '10 Consultations Bundle', consultations: 10, price: 99 };
+
+            const handlePurchase = () => {
+                onSelectPlan(fixedPlan);
+            };
 
             return (
-                <div className="card" style={{ maxWidth: '700px', margin: '0 auto' }}>
+                <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
                         alt="McDonald's"
@@ -927,82 +929,67 @@
                     />
                     <button className="back-btn" onClick={onBack}>← Back to Specialists</button>
 
-                    <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                        <div style={{ fontSize: '64px', marginBottom: '16px' }}>🚀</div>
-                        <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>You've Reached Your Free Limit!</h2>
-                        <p style={{ color: '#666', fontSize: '16px' }}>Don't lose access to our expert neonatal specialists available 24/7</p>
+                    <div style={{ textAlign: 'center', marginBottom: '32px', marginTop: '24px' }}>
+                        <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚠️</div>
+                        <h2 style={{ fontSize: '24px', marginBottom: '16px', color: '#2C3E50' }}>You've Reached Your Free Limit</h2>
+                        <p style={{ color: '#6c757d', fontSize: '16px', lineHeight: '1.6', marginBottom: '24px' }}>
+                            Keep your access by redeeming a coupon or buying a consultation bundle
+                        </p>
                     </div>
 
-                    {doctor && (
-                        <div style={{
-                            background: '#f5f5f5',
-                            padding: '16px 20px',
-                            borderRadius: '12px',
-                            marginBottom: '24px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '16px'
-                        }}>
-                            <div className="doctor-avatar" style={{ width: '50px', height: '50px', fontSize: '20px' }}>
-                                {doctor.avatar}
-                            </div>
-                            <div>
-                                <div style={{ fontWeight: '600', fontSize: '16px' }}>Continue with {doctor.name}</div>
-                                <div style={{ color: '#666', fontSize: '13px' }}>{doctor.specialty}</div>
-                            </div>
-                        </div>
-                    )}
-
+                    {/* Fixed Price Bundle */}
                     <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '24px',
-                        marginBottom: '32px'
+                        background: '#f8f9fa',
+                        padding: '28px',
+                        borderRadius: '12px',
+                        marginBottom: '24px',
+                        border: '2px solid #2C3E50'
                     }}>
-                        {/* Promo Code Option */}
-                        <div style={{
-                            border: '2px solid #2C3E50',
-                            borderRadius: '16px',
-                            padding: '24px',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s',
-                            background: showPromoCode ? '#f8f9fa' : 'white'
-                        }}
-                        onClick={() => setShowPromoCode(true)}>
-                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>🎟️</div>
-                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#2C3E50' }}>Redeem Promo Code</h3>
-                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
-                                Have a promo code? Get more free consultations instantly
-                            </p>
+                        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                            <div style={{ fontSize: '14px', color: '#6c757d', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600' }}>
+                                Consultation Bundle
+                            </div>
+                            <div style={{ fontSize: '48px', fontWeight: '700', color: '#2C3E50', marginBottom: '8px' }}>
+                                ${fixedPlan.price}
+                            </div>
+                            <div style={{ fontSize: '16px', color: '#6c757d' }}>
+                                {fixedPlan.consultations} consultations with certified specialists
+                            </div>
                         </div>
 
-                        {/* Buy Pack Option */}
-                        <div style={{
-                            border: '3px solid #4caf50',
-                            borderRadius: '16px',
-                            padding: '24px',
-                            background: 'white'
-                        }}>
-                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>💎</div>
-                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#4caf50' }}>Buy Consultation Pack</h3>
-                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
-                                Unlimited access to specialists 24/7 with our premium packs
-                            </p>
+                        <button
+                            className="btn"
+                            onClick={handlePurchase}
+                            style={{ marginBottom: '16px' }}
+                        >
+                            Purchase Bundle - ${fixedPlan.price}
+                        </button>
+
+                        <div style={{ textAlign: 'center', marginTop: '16px', marginBottom: '16px' }}>
+                            <span style={{ color: '#9ca3af', fontSize: '14px' }}>or</span>
                         </div>
+
+                        <button
+                            className="btn btn-secondary"
+                            onClick={() => setShowPromoCode(!showPromoCode)}
+                        >
+                            🎟️ I Have a Promo Code
+                        </button>
                     </div>
 
                     {showPromoCode && (
                         <div style={{
-                            background: '#f0f4ff',
+                            background: '#ffffff',
                             padding: '24px',
                             borderRadius: '12px',
                             marginBottom: '24px',
+                            border: '1px solid #e5e7eb',
                             animation: 'slideUp 0.3s ease-out'
                         }}>
-                            <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>Enter Your Promo Code</h3>
+                            <h3 style={{ marginBottom: '16px', fontSize: '16px', color: '#2C3E50', fontWeight: '600' }}>Enter Your Promo Code</h3>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     placeholder="PROMO-CODE-2024"
                                     value={promoCode}
                                     onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
@@ -1012,72 +999,14 @@
                                     Redeem
                                 </button>
                             </div>
-                            <p style={{ fontSize: '12px', color: '#666', marginTop: '12px' }}>
-                                💡 Try: WELCOME10 for 10 free consultations
+                            <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '12px' }}>
+                                💡 Enter your promotional code to unlock free consultations
                             </p>
                         </div>
                     )}
 
-                    {/* Pricing Options */}
-                    <div style={{
-                        background: '#f9f9f9',
-                        padding: '24px',
-                        borderRadius: '12px',
-                        marginBottom: '24px'
-                    }}>
-                        <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>Choose Your Plan</h3>
-                        
-                        <div style={{ display: 'grid', gap: '16px' }}>
-                            {plans.map(plan => (
-                                <div 
-                                    key={plan.id}
-                                    style={{
-                                        background: 'white',
-                                        padding: '20px',
-                                        borderRadius: '10px',
-                                        border: plan.popular ? '2px solid #2C3E50' : '2px solid #e0e0e0',
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        position: 'relative'
-                                    }}
-                                >
-                                    {plan.popular && (
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: '-12px',
-                                            left: '50%',
-                                            transform: 'translateX(-50%)',
-                                            background: '#2C3E50',
-                                            color: 'white',
-                                            padding: '4px 16px',
-                                            borderRadius: '12px',
-                                            fontSize: '12px',
-                                            fontWeight: '600'
-                                        }}>
-                                            MOST POPULAR
-                                        </div>
-                                    )}
-                                    <div>
-                                        <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '4px' }}>{plan.name}</div>
-                                        <div style={{ color: '#666', fontSize: '14px' }}>
-                                            ${plan.price}{plan.isMonthly ? '/month' : ''} - Save {plan.savings}{typeof plan.savings === 'number' ? '%' : ''}
-                                        </div>
-                                    </div>
-                                    <button 
-                                        className="btn" 
-                                        style={{ width: 'auto', padding: '10px 24px' }}
-                                        onClick={() => onSelectPlan(plan)}
-                                    >
-                                        Select
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <p style={{ textAlign: 'center', fontSize: '12px', color: '#999' }}>
-                        All plans include 24/7 access to certified neonatal specialists
+                    <p style={{ textAlign: 'center', fontSize: '13px', color: '#9ca3af', marginTop: '24px' }}>
+                        24/7 access to certified neonatal specialists • Secure payment via Stripe
                     </p>
                 </div>
             );
@@ -1087,71 +1016,77 @@
             const [showPromoCode, setShowPromoCode] = useState(false);
             const [promoCode, setPromoCode] = useState('');
 
+            // Fixed price per client/flow
+            const fixedPlan = { id: 1, name: '10 Consultations Bundle', consultations: 10, price: 99 };
+
             return (
-                <div className="card" style={{ maxWidth: '700px', margin: '0 auto' }}>
+                <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
                     <img
                         src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
                         alt="McDonald's"
                         style={{ width: '80px', height: 'auto', margin: '0 auto 16px', display: 'block' }}
                     />
-                    <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-                        <div style={{ fontSize: '64px', marginBottom: '16px' }}>🚀</div>
-                        <h2 style={{ fontSize: '28px', marginBottom: '12px' }}>You've Reached Your Free Limit!</h2>
-                        <p style={{ color: '#666', fontSize: '16px' }}>Don't lose access to our expert neonatal specialists available 24/7</p>
+                    <div style={{ textAlign: 'center', marginBottom: '32px', marginTop: '24px' }}>
+                        <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚠️</div>
+                        <h2 style={{ fontSize: '24px', marginBottom: '16px', color: '#2C3E50' }}>You've Reached Your Free Limit</h2>
+                        <p style={{ color: '#6c757d', fontSize: '16px', lineHeight: '1.6', marginBottom: '24px' }}>
+                            Keep your access by redeeming a coupon or buying a consultation bundle
+                        </p>
                     </div>
 
+                    {/* Fixed Price Bundle */}
                     <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '24px',
-                        marginBottom: '32px'
+                        background: '#f8f9fa',
+                        padding: '28px',
+                        borderRadius: '12px',
+                        marginBottom: '24px',
+                        border: '2px solid #2C3E50'
                     }}>
-                        {/* Promo Code Option */}
-                        <div style={{
-                            border: '2px solid #2C3E50',
-                            borderRadius: '16px',
-                            padding: '24px',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s',
-                            background: showPromoCode ? '#f8f9fa' : 'white'
-                        }}
-                        onClick={() => setShowPromoCode(true)}>
-                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>🎟️</div>
-                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#2C3E50' }}>Redeem Promo Code</h3>
-                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
-                                Have a promo code? Get more free consultations instantly
-                            </p>
+                        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                            <div style={{ fontSize: '14px', color: '#6c757d', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600' }}>
+                                Consultation Bundle
+                            </div>
+                            <div style={{ fontSize: '48px', fontWeight: '700', color: '#2C3E50', marginBottom: '8px' }}>
+                                ${fixedPlan.price}
+                            </div>
+                            <div style={{ fontSize: '16px', color: '#6c757d' }}>
+                                {fixedPlan.consultations} consultations with certified specialists
+                            </div>
                         </div>
 
-                        {/* Buy Pack Option */}
-                        <div style={{
-                            border: '3px solid #4caf50',
-                            borderRadius: '16px',
-                            padding: '24px',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s',
-                            background: 'white'
-                        }}>
-                            <div style={{ fontSize: '48px', textAlign: 'center', marginBottom: '16px' }}>💎</div>
-                            <h3 style={{ textAlign: 'center', marginBottom: '12px', color: '#4caf50' }}>Buy Consultation Pack</h3>
-                            <p style={{ textAlign: 'center', color: '#666', fontSize: '14px' }}>
-                                Unlimited access to specialists 24/7 with our premium packs
-                            </p>
+                        <button
+                            className="btn"
+                            onClick={onDismiss}
+                            style={{ marginBottom: '16px' }}
+                        >
+                            Purchase Bundle - ${fixedPlan.price}
+                        </button>
+
+                        <div style={{ textAlign: 'center', marginTop: '16px', marginBottom: '16px' }}>
+                            <span style={{ color: '#9ca3af', fontSize: '14px' }}>or</span>
                         </div>
+
+                        <button
+                            className="btn btn-secondary"
+                            onClick={() => setShowPromoCode(!showPromoCode)}
+                        >
+                            🎟️ I Have a Promo Code
+                        </button>
                     </div>
 
                     {showPromoCode && (
                         <div style={{
-                            background: '#f0f4ff',
+                            background: '#ffffff',
                             padding: '24px',
                             borderRadius: '12px',
                             marginBottom: '24px',
+                            border: '1px solid #e5e7eb',
                             animation: 'slideUp 0.3s ease-out'
                         }}>
-                            <h3 style={{ marginBottom: '16px', fontSize: '18px' }}>Enter Your Promo Code</h3>
+                            <h3 style={{ marginBottom: '16px', fontSize: '16px', color: '#2C3E50', fontWeight: '600' }}>Enter Your Promo Code</h3>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     placeholder="PROMO-CODE-2024"
                                     value={promoCode}
                                     onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
@@ -1161,96 +1096,24 @@
                                     Redeem
                                 </button>
                             </div>
-                            <p style={{ fontSize: '12px', color: '#666', marginTop: '12px' }}>
-                                💡 Try: WELCOME10 for 10 free consultations
+                            <p style={{ fontSize: '12px', color: '#9ca3af', marginTop: '12px' }}>
+                                💡 Enter your promotional code to unlock free consultations
                             </p>
                         </div>
                     )}
 
-                    {/* Pricing Options */}
-                    <div style={{
-                        background: '#f9f9f9',
-                        padding: '24px',
-                        borderRadius: '12px',
-                        marginBottom: '24px'
-                    }}>
-                        <h3 style={{ marginBottom: '20px', textAlign: 'center' }}>Choose Your Plan</h3>
-                        
-                        <div style={{ display: 'grid', gap: '16px' }}>
-                            <div style={{
-                                background: 'white',
-                                padding: '20px',
-                                borderRadius: '10px',
-                                border: '2px solid #e0e0e0',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                            }}>
-                                <div>
-                                    <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '4px' }}>5 Consultations Pack</div>
-                                    <div style={{ color: '#666', fontSize: '14px' }}>$299 - Save 20%</div>
-                                </div>
-                                <button className="btn" style={{ width: 'auto', padding: '10px 24px' }}>
-                                    Select
-                                </button>
-                            </div>
-
-                            <div style={{
-                                background: 'white',
-                                padding: '20px',
-                                borderRadius: '10px',
-                                border: '2px solid #2C3E50',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                position: 'relative'
-                            }}>
-                                <div style={{
-                                    position: 'absolute',
-                                    top: '-12px',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    background: '#2C3E50',
-                                    color: 'white',
-                                    padding: '4px 16px',
-                                    borderRadius: '12px',
-                                    fontSize: '12px',
-                                    fontWeight: '600'
-                                }}>
-                                    MOST POPULAR
-                                </div>
-                                <div>
-                                    <div style={{ fontWeight: '600', fontSize: '18px', marginBottom: '4px' }}>10 Consultations Pack</div>
-                                    <div style={{ color: '#666', fontSize: '14px' }}>$499 - Save 35%</div>
-                                </div>
-                                <button className="btn" style={{ width: 'auto', padding: '10px 24px' }}>
-                                    Select
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Main CTA - Different based on first view or subsequent */}
-                    {isFirstView ? (
-                        <button 
-                            className="btn" 
+                    {isFirstView && (
+                        <button
+                            className="btn btn-secondary"
                             onClick={onDismiss}
                             style={{ marginTop: '16px' }}
                         >
                             Skip for Now, Back to Hub
                         </button>
-                    ) : (
-                        <button 
-                            className="btn btn-secondary" 
-                            onClick={onDismiss}
-                            style={{ marginTop: '16px' }}
-                        >
-                            ← Back to Specialists
-                        </button>
                     )}
 
-                    <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '20px' }}>
-                        All plans include 24/7 access to certified neonatal specialists
+                    <p style={{ textAlign: 'center', fontSize: '13px', color: '#9ca3af', marginTop: '24px' }}>
+                        24/7 access to certified neonatal specialists • Secure payment via Stripe
                     </p>
                 </div>
             );
@@ -1304,7 +1167,7 @@
                                     {plan.name}
                                 </div>
                                 <div style={{ color: '#666', fontSize: '14px' }}>
-                                    {plan.consultations} consultations • Save {plan.savings}{typeof plan.savings === 'number' ? '%' : ''}
+                                    {plan.consultations} consultations with certified specialists
                                 </div>
                             </div>
                         )}
